@@ -1,0 +1,21 @@
+name: Build JPG2HEIC exe
+
+on:
+  workflow_dispatch:
+  push:
+    paths: ["jpg2heic.py"]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow pillow-heif pyinstaller
+      - run: pyinstaller --onefile --windowed --name JPG2HEIC --collect-all pillow_heif jpg2heic.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: JPG2HEIC
+          path: dist/JPG2HEIC.exe
